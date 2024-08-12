@@ -189,3 +189,37 @@ php artisan make:controller --resource NomeDoController --model=NomeDoModel
 
 npm install vue-router
 
+docker exec -it f1ac412cda99 sh
+
+mkdir -p /etc/nginx/sites-available /etc/nginx/sites-enabled
+
+touch /etc/nginx/sites-available/wordpress
+
+ln -s /etc/nginx/sites-available/wordpress /etc/nginx/sites-enabled/
+
+
+docker run -d --name meu_wordpress \
+    --network laravel \
+    -e WORDPRESS_DB_HOST=meu_mysql \
+    -e WORDPRESS_DB_USER=root \
+    -e WORDPRESS_DB_PASSWORD=${DB_PASSWORD:-'pr0t3c@0'} \
+    -e WORDPRESS_DB_NAME=${DB_USERNAME:-'curupira'} \
+    -p 8081:80 \
+    wordpress
+
+docker network ls
+
+    docker run -d --name laravel_v1_wordpress     --network laravel_v1_laravel     -e WORDPRESS_DB_HOST=db     -e WORDPRESS_DB_USER=root     -e WORDPRESS_DB_PASSWORD=${DB_PASSWORD:-'pr0t3c@0'}     -e WORDPRESS_DB_NAME=${DB_USERNAME:-'curupira'}     -p 8081:80     -v /var/www/html/wordpress:/var/www/html     wordpress
+7bc3f70428a960cbd1f6e73deddd4c5a9980e6d36883994612cff5855a54ef42
+
+
+https://www.hostinger.com.br/tutoriais/como-instalar-e-usar-wp-cli-para-gerenciar-blog-wordpress?utm_campaign=Generic-Tutorials-DSA|NT:Se|LO:BR-t3&utm_medium=ppc&gad_source=1&gclid=CjwKCAjw2dG1BhB4EiwA998cqBbKP1ldgEzBhi0uAkhoCG_az6x-WiqmgdmJtwnVUtOd4Xa9fnTq-BoC_RkQAvD_BwE
+
+php artisan route:clear
+
+php artisan config:clear
+
+php artisan view:clear
+
+php artisan cache:clear
+

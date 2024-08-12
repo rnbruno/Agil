@@ -1,26 +1,14 @@
 <?php
 
-use App\Http\Controllers\Admin\{ReplySupportController, SupportController};
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\CustomerController;
-use App\Http\Controllers\UsuarioController;
-use App\Http\Controllers\CartaoController;
-use App\Http\Controllers\Site\SiteController;
-use App\Http\Controllers\PostController;
+
+use App\Http\Controllers\FormVericationController;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 use App\Http\Controllers\Api\UsuarioApiController;
 use App\Http\Controllers\DashboardController;
+use App\Mail\TestEmail;
+use Illuminate\Support\Facades\Mail;
 
-
-
-
-
-// Route::get('/contato', [SiteController::class, 'contact']);
-
-// Route::get('/', function () {
-//     return Inertia::render('Create');
-// });
 
 /*
 |--------------------------------------------------------------------------
@@ -32,7 +20,12 @@ use App\Http\Controllers\DashboardController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+Route::get('/send-email', function () {
+    Mail::to('recipient@example.com')->send(new TestEmail());
+    return 'Email sent!';
+});
 
+Route::post('/verification/login/', [FormVericationController::class, 'getLogin'])->name('verification');
 
 Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
 

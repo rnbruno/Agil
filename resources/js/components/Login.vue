@@ -26,7 +26,7 @@
                                 <div class="shrink-0 flex items-center">
                                     <img class="mb-4" :src="logoUrl" style="width:65px" alt="Logo" width="72"
                                         height="57">
-                                    <h1 class="h3 ml-3 fw-normal">Login Patusco</h1>
+                                    <h1 class="h3 ml-3 fw-normal">Login Digital Wallet</h1>
                                 </div>
 
                                 <div class="form-floating">
@@ -84,7 +84,7 @@ export default {
     name: 'Login',
     data() {
         return {
-            logoUrl: '/img/logo.jpg', // Caminho relativo a partir da pasta public
+            logoUrl: '/img/logo_wallet.PNG', // Caminho relativo a partir da pasta public
             showDropdown: false,
 
         }

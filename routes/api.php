@@ -3,6 +3,7 @@
 use App\Http\Controllers\Api\Auth\AuthController;
 use App\Http\Controllers\Api\ReplySupportApiController;
 use App\Http\Controllers\Api\SupportController;
+use App\Http\Controllers\ApiController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\CompanyController;
 use App\Http\Controllers\Api\CartaoController;
@@ -13,6 +14,8 @@ use App\Http\Controllers\Api\MarcacoesController;
 use App\Http\Controllers\Api\MedicalController;
 use App\Http\Controllers\Api\HorariosDisponiveisController;
 use App\Http\Controllers\Api\AnimalUserController;
+// use App\Http\Controllers\Api\ApiCotacaoController;
+
 
 
 Route::controller(AuthController::class)->group(function () {
@@ -22,26 +25,6 @@ Route::controller(AuthController::class)->group(function () {
     Route::post('refresh', 'refresh');
 });
 
-// Route::apiResource('companies', CompanyController::class);
-Route::apiResource('companies', CompanyController::class)->names([
-    'index' => 'companies.index'
-]);
-
-Route::apiResource('cartao', CartaoController::class)->names([
-    'index' => 'cartao.index'
-]);
-
-// Route::apiResource('usuarios_json', UsuarioApiController::class)->names([
-//     'index' => 'usuarios_json.usuarioPessoaJson'
-// ]);
-
-Route::apiResource('acesso', AcessoController::class)->names([
-    'index' => 'acesso.index'
-]);
-
-Route::apiResource('acesso12', AcessoController::class)->names([
-    'index1' => 'acesso12.index1'
-]);
 
 Route::apiResource('contas', ContaController::class)->names([
     'index' => 'contas.index'
@@ -68,3 +51,11 @@ Route::apiResource('/medical', MedicalController::class);
 Route::get('/animaluser/{id}', [AnimalUserController::class, 'show'])->name('animaluser.show');
 
 Route::post('/submitMarcacao', [MarcacoesController::class, 'store'])->name('marcacao.store');
+
+Route::apiResource('/getCotacao', App\Http\Controllers\Api\ApiCotacaoController::class);
+
+Route::apiResource('/useremail', App\Http\Controllers\Api\UserController::class);
+
+Route::post('/transfer/valor', [App\Http\Controllers\Api\TransferController::class, 'store'])->name('transfer.store');
+
+Route::get('/getTransfer/{id}', [App\Http\Controllers\Api\TransferController::class, 'show']);

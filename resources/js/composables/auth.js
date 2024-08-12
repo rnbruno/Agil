@@ -5,7 +5,8 @@ import { ABILITY_TOKEN } from "@casl/vue";
 
 const user = reactive({
     name: "",
-    email: "",
+    email_to: "",
+    id_int: "",
 });
 
 export default function useAuth() {
@@ -14,12 +15,27 @@ export default function useAuth() {
     const router = useRouter();
     const swal = inject("$swal");
     const ability = inject(ABILITY_TOKEN);
+    const logusergIn_ = ref({});
 
     const loginForm = reactive({
         email: "",
         password: "",
         remember: false,
     });
+    const SendItemLogin = reactive({
+        email: "",
+        password: "",
+        remember: false,
+    });
+    let transferir = ref(false);
+
+    const registerForm = reactive({
+        name: "",
+        email: "",
+        remail: "",
+        password: "",
+    });
+
     const loggedIn = ref(false);
     const user = ref({
         name: "",
@@ -66,6 +82,40 @@ export default function useAuth() {
             .catch((error) => {
                 if (error.response?.data) {
                     validationErrors.value = error.response.data.errors;
+                    swal({
+                        icon: 'error',
+                        title: '',
+                        text: error.response.data.message,
+                    });
+                }
+            })
+            .finally(() => (processing.value = false));
+    };
+
+    const submitRegister = async () => {
+        if (processing.value) return;
+
+        processing.value = true;
+        validationErrors.value = {};
+
+        axios
+            .post("api/register", registerForm)
+            .then(async (response) => {
+                // loginUser(response);
+                swal({
+                    icon: response.status,
+                    title: response.status,
+                    text: response.message,
+                });
+            })
+            .catch((error) => {
+                console.log(error.response); 
+                if (error.response?.data) {
+                    swal({
+                        icon: 'error',
+                        title: '',
+                        text: error.response.data.message,
+                    });
                 }
             })
             .finally(() => (processing.value = false));
@@ -75,7 +125,7 @@ export default function useAuth() {
         user.name = response.data.user.name;
         user.email = response.data.user.email;
         user.nameType = response.data.user.nameType;
-        user.id_int = response.data.id_int;
+        user.id_int = response.data.user.id_int;
         user.type_user = response.data.user.type_user;
 
         const loginTime = new Date().getTime();
@@ -90,14 +140,18 @@ export default function useAuth() {
         // Armazena o usuário no localStorage
         localStorage.setItem("user", JSON.stringify(updatedUser));
         localStorage.setItem("loggedIn", JSON.stringify(true));
+        sessionStorage.setItem('user', JSON.stringify(updatedUser));
         await getAbilities();
         await router.push({ name: "welcome.index" });
     };
 
     const getUser = () => {
-        axios.get("/api/user").then((response) => {
-            loginUser(response);
-        });
+        const loggIn_ = JSON.parse(localStorage.getItem("loggedIn"));
+        if(loggIn_){
+            axios.get("/api/user").then((response) => {
+                loginUser(response);
+            });
+        }
     };
 
     const logout = async () => {
@@ -106,9 +160,9 @@ export default function useAuth() {
         processing.value = true;
         localStorage.removeItem("user");
         localStorage.removeItem("loggedIn");
+        sessionStorage.removeItem("user");
         try {
             const response = await axios.get("/logout");
-            console.log("Logout successful:", response.data);
             localStorage.removeItem("user");
             localStorage.removeItem("loggedIn");
             await router.push({ name: "login" });
@@ -163,6 +217,12 @@ export default function useAuth() {
         getUser,
         logout,
         getAbilities,
-        checkLoginStatus
+        checkLoginStatus,
+        submitRegister,
+        registerForm,
+        SendItemLogin,
+        transferir,
+        logusergIn_,
+        
     };
 }

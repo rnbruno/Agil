@@ -45,6 +45,16 @@
                                 </option>
                             </select>
                         </div>
+                        <div class="col-md-5">
+                            <label for="country" class="form-label">Users</label>
+                            <select v-if="user.type_user === 2" class="form-control" id="horariosD" name="horariosD"
+                                for="horariosD" v-model="selectedOptionHorariosDisponiveis" required>
+                                <option v-for="optionHorariosDisponivel in modalOptionsHorariosDisponiveis"
+                                    :key="optionHorariosDisponivel.value" :value="optionHorariosDisponivel.value">
+                                    {{ optionHorariosDisponivel.text }}
+                                </option>
+                            </select>
+                        </div>
                         <div class="col-md-12">
                             <button class="btn btn-primary btn-lg items-center" type="submit"
                                 title="marque um agendamento">Marcar</button>
@@ -68,6 +78,7 @@ import Swal from 'sweetalert2';
 import ModalAtribuir from '../../modal/AtribuirModal.vue';
 import Modal_e from '../../modal/Modal_e.vue';
 import { format } from 'date-fns';
+import useAuth from "@/composables/auth";
 
 
 export default {
@@ -116,6 +127,7 @@ export default {
         const { medical, medicals, getMedicals } = useMedicals();
         const { horariosDisponiveis, getHorariosDisponiveis } = useHorariosDisponiveis();
         const { animalsUsers, getAnimalsUser } = useAnimalUser();
+        const { user, processing, logout } = useAuth();
 
         const modalOptions = ref([]);
         const modalOptionsAnimalsUser = ref([]);
@@ -258,7 +270,8 @@ export default {
             errors,
             handleSubmit,
             form,
-            router
+            router,
+            user,
 
         };
     },
@@ -293,7 +306,7 @@ export default {
                     note: this.searchQuery  // Pegando o valor do textarea
                 };
                 const response = await axios.post('/api/submitMarcacao', formData);
-                
+
                 this.$router.push({ name: 'welcome.index' });
 
                 Swal.fire({

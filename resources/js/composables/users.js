@@ -13,6 +13,8 @@ export default function useUsers() {
         password: '',
         remember: ''
     })
+    const usersEmails = ref({})
+
     const router = useRouter()
     const validationErrors = ref({})
     const isLoading = ref(false)
@@ -36,12 +38,23 @@ export default function useUsers() {
                 logins.value = response.data.data;
             })
     }
+    const getUserEmail = async () => {
+
+        try {
+            const response = await axios.get("/api/useremail");
+            usersEmails.value = Object.entries(response.data).map(([key, value]) => ({ key, ...value }));
+        } catch (error) {
+            console.error("Erro ao buscar as cotações:", error);
+        }
+    }
 
 
     return {
         getUsers,
         getUser,
         validationErrors,
-        isLoading
+        isLoading,
+        getUserEmail,
+        usersEmails
     }
 }

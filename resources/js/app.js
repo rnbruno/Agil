@@ -22,19 +22,21 @@ import { fas } from '@fortawesome/free-solid-svg-icons';
 import { fab } from '@fortawesome/free-brands-svg-icons';
 import '@fortawesome/fontawesome-free/css/all.min.css'; // Importa o CSS do Font Awesome
 import { InertiaProgress } from '@inertiajs/progress';
+import { createPinia } from 'pinia';
 
 library.add(fas, fab);
 import ability from './services/ability';
 
-
+const pinia = createPinia();
 
 const app = createApp({
-    // setup() {
-    //     const { getUser } = useAuth()
-    //     onMounted(getUser)
-    // }
+    setup() {
+        const { getUser } = useAuth()
+        onMounted(getUser)
+    }
 })
 app.component('font-awesome-icon', FontAwesomeIcon);
+app.use(pinia);
 app.use(router)
 app.use(VueSweetalert2)
 app.use(library)
