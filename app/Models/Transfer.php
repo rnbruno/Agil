@@ -46,7 +46,6 @@ class Transfer extends Model
 
         $newTransfer = Transfer::latest()->first();
 
-             // Retorna os dados utilizando a MarcacoesResource
         return $newTransfer;
     }
     

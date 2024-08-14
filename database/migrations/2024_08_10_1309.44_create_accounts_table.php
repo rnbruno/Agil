@@ -13,8 +13,8 @@ return new class extends Migration
     {
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('accounts_id')->references('id')->on('users')->onDelete('cascade');
-            $table->foreignId('bank_id')->constrained('banks')->onDelete('cascade');
+            $table->integer('id_int');
+            $table->integer('bank_id');
             $table->string('account_number')->unique();
             $table->enum('account_type', ['corrente', 'poupanca']);
             $table->decimal('balance', 15, 2)->default(0.00);

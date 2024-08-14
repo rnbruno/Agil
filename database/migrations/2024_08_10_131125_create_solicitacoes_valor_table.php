@@ -13,10 +13,10 @@ return new class extends Migration
     {
         Schema::create('solicitacoes_valor', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('user_id')->constrained()->onDelete('cascade'); // Relaciona com a tabela de usuários
-            $table->decimal('amount', 15, 2); // Valor solicitado
-            $table->string('currency', 3)->default('BRL'); // Moeda (ex: BRL, USD)
-            $table->string('status')->default('pending'); // Status da solicitação (ex: pending, approved, rejected)
+            $table->integer('from_account_id');
+            $table->integer('to_account_id');
+            $table->decimal('amount', 15, 2);
+            $table->enum('status', ['pendente', 'completada', 'cancelada']);
             $table->text('notes')->nullable(); // Notas ou observações
             $table->timestamps();
         });

@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('account_id')->constrained('accounts');
             $table->date('balance_date');
+            $table->string('sinal');
             $table->decimal('amount', 15, 2);
             $table->timestamps();
         });

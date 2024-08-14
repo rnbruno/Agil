@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('transfers', function (Blueprint $table) {
+        Schema::create('vehicle_models', function (Blueprint $table) {
             $table->id();
-            $table->integer('from_account_id');
-            $table->integer('to_account_id');
-            $table->decimal('amount', 15, 2);
-            $table->enum('status', ['pendente', 'completada', 'cancelada']);
-            $table->string('mensagem')->nullable();
+            $table->string('modelo');
+            $table->string('tag1')->nullable();
+            $table->string('tag2')->nullable();
+            $table->string('tag3')->nullable();
+            $table->string('tag4')->nullable();
             $table->timestamps();
         });
     }
@@ -27,6 +27,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('transfers');
+        Schema::dropIfExists('vehicle_models');
     }
 };

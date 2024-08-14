@@ -67,61 +67,60 @@ class Balance extends Model
         $resposta["status"] = false;
         $resposta["message"] = "erro";
 
-        $lastRecord = DB::table('balances')
-            ->where('account_id', $usuario_to)
+        $lastRecord = DB::table('accounts')
+            ->where('id_int', $usuario_to)
             ->orderBy('id', 'desc')
             ->first();
 
 
         if ($lastRecord) {
             // Passo 2: Calcule o novo valor.
-            $newAmount = $lastRecord->amount + $valor;
+            $newAmount = $lastRecord->balance + $valor;
 
-            // Passo 3: Atualize o registro com o novo valor.
-            DB::table('balances')
-                ->where('id', $lastRecord->id)
-                ->update([
-                    'amount' => $newAmount,
-                    'updated_at' => now(), // Atualize o timestamp
-                    'balance_date' => now() // Atualize o timestamp
-                ]);
-        } else {
             // Se não houver registros, insira um novo registro
             DB::table('balances')->insert([
                 'account_id' => $usuario_to,
-                'amount' => $valor,
+                'amount' => $newAmount,
+                'sinal' => '+',
                 'created_at' => now(),
                 'updated_at' => now(),
                 'balance_date' => now()
             ]);
+
+            DB::table('accounts')
+            ->where('id', $usuario_to) // Condição para selecionar o registro
+            ->update([
+                'balance' => $newAmount,
+                'updated_at' => now(), // Atualiza o campo updated_at com a data e hora atual
+            ]);
+
         }
 
-        $lastRecordTo = DB::table('balances')
-            ->where('account_id', $usuario_from)
+        $lastRecordFrom = DB::table('accounts')
+            ->where('id_int', $usuario_from)
             ->orderBy('id', 'desc')
             ->first();
 
 
-        if ($lastRecordTo) {
+        if ($lastRecordFrom) {
             // Passo 2: Calcule o novo valor.
-            $newAmount = $lastRecordTo->amount - $valor;
+            $newAmount = $lastRecordFrom->balance - $valor;
 
-            // Passo 3: Atualize o registro com o novo valor.
-            DB::table('balances')
-                ->where('id', $lastRecordTo->id)
-                ->update([
-                    'amount' => $newAmount,
-                    'updated_at' => now(), // Atualize o timestamp
-                    'balance_date' => now()
-                ]);
-        } else {
-            // Se não houver registros, insira um novo registro
+
             DB::table('balances')->insert([
-                'account_id' => $usuario_to,
+                'account_id' => $usuario_from,
                 'amount' => $valor,
                 'created_at' => now(),
+                'sinal' => '-',
                 'updated_at' => now(),
                 'balance_date' => now()
+            ]);
+            
+            DB::table('accounts')
+            ->where('id', $usuario_from) // Condição para selecionar o registro
+            ->update([
+                'balance' => $newAmount,
+                'updated_at' => now(), // Atualiza o campo updated_at com a data e hora atual
             ]);
         }
 
